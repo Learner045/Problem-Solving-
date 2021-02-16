@@ -1,0 +1,30 @@
+/*
+Input: intervals = [[0,30],[5,10],[15,20]]
+Output: 2
+*/
+
+class Solution {
+   
+    public int minMeetingRooms(int[][] intervals) {
+         
+        Arrays.sort(intervals, new Comparator<int[]>(){
+            public int compare(int[] m1, int[] m2){
+                return Integer.compare(m1[0], m2[0]);
+            }
+        });
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        pq.add(intervals[0][1]);
+        
+        int rooms = 1;
+        for(int i=1; i<intervals.length; i++){
+            int[] meeting = intervals[i];
+            if(meeting[0]>=pq.peek()){
+                pq.poll();
+            }
+                pq.add(meeting[1]);
+        }
+        
+        return pq.size();
+    }
+}
