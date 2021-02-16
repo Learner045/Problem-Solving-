@@ -1,0 +1,55 @@
+/* 
+Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+Output: [[1,6],[8,10],[15,18]]
+Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].
+*/
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+       
+        //sort on end times of intervals
+        PriorityQueue<int[]> queue = new PriorityQueue<>(new Comparator<int[]>(){
+            public int compare(int[] interval1, int[] interval2){
+                return Integer.compare(interval1[1], interval2[1]);
+            } 
+        });
+        
+        //sort on start times of intervals
+        Arrays.sort(intervals, new Comparator<int[]>(){
+            public int compare(int[] interval1, int[] interval2){
+                return Integer.compare(interval1[0], interval2[0]);
+            }
+        });
+       
+        queue.add(intervals[0]);
+        Boolean assigned = false;
+        
+        for(int i=1; i<intervals.length; i++){
+            assigned = false;
+            int[] inv = intervals[i];
+        
+            for(int[] prevs_inv:queue){
+               
+                if(prevs_inv[0]<= inv[0] && prevs_inv[1]>=inv[0] ){
+                    assigned = true;
+                    queue.remove(prevs_inv);
+                    int[] new_inv = new int[]{Math.min(prevs_inv[0],inv[0]), Math.max(prevs_inv[1],inv[1])};
+                    queue.add(new_inv);
+                    break;
+                }
+                
+           }
+           if(!assigned){  queue.add(inv);}
+                   
+        }//end of for
+        
+     
+       int count = 0;      
+       int[][] result = new int[queue.size()][];
+       for(int[] interval: queue){
+          result[count++] = interval;
+       }
+        
+        return result;
+    }
+}
