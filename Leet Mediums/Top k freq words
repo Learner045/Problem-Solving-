@@ -1,0 +1,23 @@
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> counts  = new HashMap<>();
+        for(String word : words){
+            if(counts.containsKey(word)){
+                counts.put(word, counts.get(word)+1);
+            }else{
+                counts.put(word, 1);
+            }
+        }
+        
+        List<String> list = new ArrayList<>(counts.keySet());
+        
+        Collections.sort(list, new Comparator<String>(){
+            public int compare(String a, String b){
+                if(counts.get(a) == counts.get(b))return a.compareTo(b);
+                else return -Integer.compare(counts.get(a), counts.get(b));
+            }
+        });
+        
+        return list.subList(0,k);
+    }
+}
