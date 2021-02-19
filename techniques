@@ -1,0 +1,15 @@
+1) Inorder to avoid duplicate values without using set or additional data structure, we just skip that value during iteration itself when array is sorted
+Imp: works only when array is sorted. 
+eg. nums[i] - nums[j] == k
+   Arrays.sort(nums); //imp
+        for(int i=0; i<nums.length-1; i++){
+         if(i>0 && nums[i] == nums[i-1])continue; //to avoid duplicate
+          for(int j=i+1; j<nums.length; j++){
+            if(j>(i+1) && nums[j] == nums[j-1])continue; //to avoid duplicate
+              int val = Math.abs(nums[i]-nums[j]);
+              if( val == k)pairs++;
+              if(val>k)break; //optimization 
+           }
+         }
+         
+   
