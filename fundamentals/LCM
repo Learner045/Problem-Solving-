@@ -1,0 +1,10 @@
+int a, b
+int lcm = a>b?a:b
+
+while(true){
+
+if(lcm%a == 0 && lcm%b == 0)System.out.println("lcm found "+lcm);
+
+lcm++;
+
+}
