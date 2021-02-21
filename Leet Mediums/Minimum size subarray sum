@@ -1,0 +1,28 @@
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        
+   
+        int currSum = 0;
+        int minLen= Integer.MAX_VALUE;
+       
+        int j = 0;
+        for(int i=0; j<nums.length && i<nums.length; ){
+           
+            currSum += nums[j];
+         
+            if(currSum>=target){
+              
+                minLen = Math.min(minLen, j-i+1);
+                i++;
+                if(i>0){
+                currSum -= nums[i-1];
+                currSum -= nums[j];
+                }
+                if(minLen == 1)return minLen;
+            }else if(currSum<target)j++;
+            
+        }
+        
+        return minLen==Integer.MAX_VALUE?0:minLen;
+    }
+}
