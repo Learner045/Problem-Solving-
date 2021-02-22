@@ -1,0 +1,68 @@
+/*
+Input: chars = ["a","a","b","b","c","c","c"]
+Output: Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]
+Explanation: The groups are "aa", "bb", and "ccc". This compresses to "a2b2c3".
+*/
+
+class Solution {
+    public int compress(char[] chars) {
+      
+        int count = 1;
+        int i=0; 
+        int j=0;
+        int n = chars.length;
+        int index = 0;
+        while(j<n){
+          
+            if(j<n && chars[i] == chars[j]){
+                j++;
+            }else{
+                if(j>=n)break;
+                count = j-i;
+                if(count>1){
+                    String ch= chars[j-1]+"";
+                    chars[index++] = chars[j-1];
+                    char[] chs = getCount(count+"");
+                    for(int k=0; k<chs.length; k++){
+                        chars[index++] = chs[k];
+                    }
+                    
+                }else{
+                    chars[index++] = chars[j-1];
+                   
+                }
+                i=j;
+            }
+        }
+    
+ 
+    if(j==n && chars[i] == chars[j-1]){
+        
+        count = j-i;
+             if(count>1){
+                    String ch= chars[j-1]+"";
+               
+                    chars[index++] = chars[j-1];
+                    char[] chs = getCount(count+"");
+                    for(int k=0; k<chs.length; k++){
+                        chars[index++] = chs[k];
+                    }
+                    
+                }else{
+                    chars[index++] = chars[j-1];
+                   
+                }
+    }
+    
+ 
+        return index;
+    }
+    
+    public char[] getCount(String num){
+        char[] c = new char[num.length()];
+        for(int i=0; i<num.length(); i++){
+            c[i] = num.charAt(i);
+        }
+        return c;
+    }
+}
