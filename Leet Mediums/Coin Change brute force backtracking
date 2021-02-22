@@ -1,0 +1,35 @@
+/*
+Input: coins = [1,2,5], amount = 11
+Output: 3
+Explanation: 11 = 5 + 5 + 1
+*/
+
+//Time Limit Exceeded
+class Solution {
+    
+    int min = Integer.MAX_VALUE;
+    public int coinChange(int[] coins, int amount) {
+        if(amount == 0)return 0;
+        
+        getCoin(0, coins, amount, 0);
+        
+        return min==Integer.MAX_VALUE?-1:min;
+    }
+    
+    public void getCoin(int index, int[] coins, int amt, int total){
+        
+        if(amt<0)return;
+        if(amt == 0){
+            if(total>0){
+                min = Math.min(min, total);
+            }
+            return;
+        }else if(index == coins.length)return;
+        
+        //take the coin
+        getCoin(index, coins, amt-coins[index], total+1);
+        
+        //don't take
+        getCoin(index+1, coins, amt, total);
+    }
+}
