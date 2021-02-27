@@ -1,0 +1,35 @@
+/*
+Input: [1,0,1,1,0]
+Output: 4
+Explanation: Flip the first zero will get the the maximum number of consecutive 1s.
+    After flipping, the maximum number of consecutive 1s is 4.
+*/
+
+class Solution {
+   
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int size = nums.length;
+   
+        int low = 0;
+        int high = 0;
+        int count = 1;
+        int max = 0;
+        while(high<size){
+            
+            if(nums[high]==1){
+                high++;
+            }else if(nums[high] == 0 && count>0){
+                count--;
+                high++;
+            }else{
+                while(nums[low] != 0)
+                 low++;
+                low++;
+                count=1;
+                
+            }
+            max = Math.max(max, high-low+1);
+        }
+        return max-1;
+    }
+}
