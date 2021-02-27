@@ -1,0 +1,27 @@
+class Solution {
+    public int thirdMax(int[] nums) {
+        int maxNum = (int) Double.NEGATIVE_INFINITY;
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->Integer.compare(b,a));
+        pq.add(nums[0]);
+        
+        for(int i=1; i<nums.length; i++){
+            if(!pq.contains(nums[i])){
+                pq.add(nums[i]);
+            }
+        }
+        
+        if(pq.size()<3){
+            while(!pq.isEmpty()){
+                maxNum = Math.max(maxNum, pq.poll());
+            }
+            return maxNum;
+        }
+        int k = 3;
+        while(k-1>0){
+            pq.remove();
+            k--;
+        }
+        return pq.poll();
+    }
+}
