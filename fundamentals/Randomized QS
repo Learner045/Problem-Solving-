@@ -1,0 +1,49 @@
+class Solution {
+    
+    int[] nums;
+    
+    public void swap(int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    
+    public int partition(int left, int right, int pvt_index){
+        int pivot = nums[pvt_index];
+        swap(pvt_index, right);
+        int pos = left;
+        
+        for(int i=left; i<right; i++){
+            if(nums[i]<pivot){
+                swap(pos, i);
+                pos++;
+            }
+        }
+        
+        swap(pos, right); //moving pivot element at its place
+        return pos;
+    }
+    
+    public int QS(int left, int right, int k_smallest){
+        if(left == right)return nums[left];
+        
+        int pvt_index = left + new Random().nextInt(right-left);
+        
+        int pvt_loc = partition(left, right, pvt_index);
+        
+        //problem statement different - find kth largest
+        if(k_smallest == pvt_loc)return nums[pvt_loc];
+        else if(k_smallest<pvt_loc)return QS(left, pvt_loc-1, k_smallest);
+        else return QS(pvt_loc+1, right, k_smallest);
+    }
+    
+    public int findKthLargest(int[] nums, int k) {
+        this.nums = nums;
+        int index = nums.length-k;
+       
+        return QS(0, nums.length-1, index);
+    }
+    
+}
+
+
