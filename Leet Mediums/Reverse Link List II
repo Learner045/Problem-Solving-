@@ -1,0 +1,50 @@
+/*
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    ListNode tail = null;
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if(left == right)return head;
+        if(head == null)return null;
+        
+        
+        int count = right-left;
+        
+        ListNode curr = head;
+        ListNode prev = new ListNode(-501);//prev of head to be reversed
+        for(int i=1; i<left; i++){
+            prev = curr;
+            curr=curr.next;
+        }
+        prev.next = reverse(curr, count);
+        curr.next = tail;
+        if(prev.val == -501)return prev.next; //edge case
+        return head;
+        
+    }
+    public ListNode reverse(ListNode head, int count){ 
+        ListNode dummy = new ListNode();
+        ListNode next = null;
+        while(head!=null && count>=0){
+            next = head.next;
+            head.next = dummy;
+            dummy = head;
+            count--;
+            head = next;
+        }
+        this.tail = next;//next of tail
+        return dummy; //tail of orig list 
+    }
+}
