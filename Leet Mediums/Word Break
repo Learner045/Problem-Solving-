@@ -1,0 +1,34 @@
+class Solution {
+    
+    int dp[];
+    List<String> wordDict;
+    //-1 null 0: false 1:true
+    public boolean wordBreak(String s, List<String> wordDict) {
+        dp = new int[s.length()+1];
+        this.wordDict = wordDict;
+        
+        Arrays.fill(dp, -1);
+        int result = isPossible(s, 0);
+        return result == 1?true:false;
+    }
+    
+    public int isPossible(String s, int pos){
+      
+        if(pos>=s.length())return 1;
+        
+        if(dp[pos]!=-1)return dp[pos];
+        
+        
+        for(int i = pos; i<= s.length(); i++){
+
+            if( wordDict.contains(s.substring(pos,i)) && (isPossible(s, i)==1) ){        
+                dp[pos] = 1; 
+                return 1;
+            }
+            
+        }
+  
+        dp[pos] = 0;
+        return 0;
+    }
+}
