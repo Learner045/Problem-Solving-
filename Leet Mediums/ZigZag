@@ -1,0 +1,53 @@
+class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows == 1:
+            return s
+        
+        nums = []
+        count = 1;
+        
+        inc = True
+        for i in range(0, len(s)):
+            nums.append(count)
+            if(inc):
+                count+=1
+            if(inc==False):
+                count-=1
+            if(count == numRows):
+                inc = False;
+            if(count==1):
+                inc = True
+        
+        print(nums)
+        dictx = {}
+        for i in range(0, len(nums)):
+            if nums[i] not in dictx:
+                dictx[nums[i]] = []
+                
+            charsList = dictx.get(nums[i])
+            charsList.append(s[i])
+            dictx[nums[i]] = charsList
+        
+        print(dictx)
+        
+        output = []
+        track = []
+        for num in nums:
+            if num not in track:
+                vals = dictx.get(num)
+                output.append(vals)
+                track.append(num)
+            else:
+                continue
+        
+        str1 = ''
+        for lst in output:
+            for st in lst:
+                str1 += st
+    
+        return str1
+                
+            
+            
+            
+       
