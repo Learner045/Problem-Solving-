@@ -1,0 +1,30 @@
+class Solution {
+    
+    List<String> result;
+        
+    public List<String> generateParenthesis(int n) {
+        result = new ArrayList<>();
+        
+        solve(0, 0, n, new StringBuilder());
+        return result;
+    }
+    
+    public void solve(int open, int close, int n, StringBuilder sb){
+        if(sb.length() == 2*n){
+            result.add(sb.toString());
+            return;
+        }
+        
+        if(open<n){
+            sb.append("(");
+            solve(open+1, close, n, sb);
+            sb.deleteCharAt(sb.length()-1);
+        }
+       if(close<open){
+            sb.append(")");
+            solve(open, close+1, n, sb);
+           sb.deleteCharAt(sb.length()-1);
+        }
+    
+    }
+}
