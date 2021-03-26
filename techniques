@@ -1,4 +1,6 @@
 1) Inorder to avoid duplicate values without using set or additional data structure, we just skip that value during iteration itself when array is sorted
+
+
 Imp: works only when array is sorted. 
 eg. nums[i] - nums[j] == k
    Arrays.sort(nums); //imp
