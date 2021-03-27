@@ -1,0 +1,48 @@
+class Solution {
+    
+    Set<Integer> result = new HashSet<>();
+    List<Integer> pid;
+    List<Integer> ppid;
+    public List<Integer> killProcess(List<Integer> pid, List<Integer> ppid, int kill) {
+        this.pid = pid;
+        this.ppid = ppid;
+        
+      // solve(kill);
+      // return new ArrayList<>(result);
+        
+        nonBruteForce(kill);
+        return new ArrayList<>(result); 
+    }
+    public void solve(int toKill){
+         result.add(toKill);
+         for(int i=0; i<ppid.size(); i++){
+            if(ppid.get(i) == toKill){
+                solve(pid.get(i));
+            }
+         }
+    }
+    
+    public void nonBruteForce(int kill){
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        
+        for(int i=0; i<ppid.size(); i++){
+            if(ppid.get(i)>0){
+                List<Integer> l = map.getOrDefault(ppid.get(i), new ArrayList<>());
+                l.add(pid.get(i));
+                map.put(ppid.get(i), l);
+            }
+        }
+        
+        List<Integer> queue = new LinkedList<>();
+        queue.add(kill);
+        while(!queue.isEmpty()){
+            int node = queue.remove(queue.size()-1);
+            result.add(node);
+            if(map.containsKey(node)){
+                 for(int child: map.get(node))
+                    queue.add(child);
+            }
+        }
+        
+    }
+}
