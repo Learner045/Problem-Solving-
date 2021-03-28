@@ -1,0 +1,71 @@
+class Solution {
+    
+    Map<Integer, Integer> map = new HashMap<>();
+    int[][] pref;
+    
+    public int unhappyFriends(int n, int[][] preferences, int[][] pairs) {
+        this.pref = preferences;
+        
+        for(int[] pair: pairs){
+            map.put(pair[0], pair[1]);
+            map.put(pair[1], pair[0]);
+        }
+        
+        int unhappy = 0;
+        
+        for(Map.Entry<Integer,Integer> entry: map.entrySet()){
+            int key = entry.getKey();
+            int val = entry.getValue();
+            
+            List<Integer> prefList = getPrefList(key);
+            System.out.println(prefList.toString());
+            
+            boolean res = isUnhappy(prefList, key);
+            if(res)unhappy++;
+        }
+        return unhappy;
+        
+    }
+    
+    public List<Integer> getPrefList(int val){
+        List<Integer> prefList = new ArrayList<>();
+        int pairedWith = map.get(val);
+        for(int num: pref[val]){
+          
+                if(num == pairedWith)break;
+                prefList.add(num);
+            
+        }
+        return prefList;
+    }
+    
+    public boolean isUnhappy(List<Integer> prefList, int val){
+        if(prefList.size() == 0)return false;
+        
+        
+        int prefferedIndex = -1, pairedWithIndex = -1;
+        
+        for(int prefs: prefList){
+            int pairedWith = map.get(prefs);
+            prefferedIndex = -1; pairedWithIndex = -1;
+            for(int i=0; i<pref[prefs].length; i++){
+                if(pref[prefs][i] == val){
+                    prefferedIndex = i;
+                }
+                if(pref[prefs][i] == pairedWith){
+                    pairedWithIndex = i;
+                }
+                
+                if(pairedWithIndex!=-1 && prefferedIndex!=-1){
+                    break;
+                }
+            }
+            
+            if(pairedWithIndex!=-1 && prefferedIndex!=-1 && prefferedIndex<pairedWithIndex)return true;
+            
+        }
+        return false;
+    }
+    
+    
+}
