@@ -1,0 +1,27 @@
+class MyCalendar {
+
+    List<int[]> bookings;
+    public MyCalendar() {
+        bookings = new ArrayList<>();
+    }
+    
+    public boolean book(int start, int end) {
+        //no overlap if 
+        //start1 >= end2 or end1 <= start2
+        
+        //Demorgan's law, overlap if start1 < end2 and end1 > start2
+        
+        for(int[] time: bookings){
+            if(time[0]<end && start<time[1])return false;
+        }
+        bookings.add(new int[]{start,end});
+        
+        return true;
+    }
+}
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * boolean param_1 = obj.book(start,end);
+ */
