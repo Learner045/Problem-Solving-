@@ -1,0 +1,42 @@
+class FirstUnique {
+
+    Map<Integer, Integer> map = new HashMap<>();
+    LinkedList<Integer> ul = new LinkedList<>();
+    public FirstUnique(int[] nums) {
+        
+        for(int i=0; i<nums.length; i++){
+           addVal(nums[i]);
+        }
+    }
+    
+    public void addVal(int num){
+         if(map.containsKey(num)){
+                int freq = map.get(num);
+                map.put(num,freq+1);
+                //element has already been added once so we remove it, which needs to be done only the first time because after that we don't addd bak
+                if(freq==1)ul.remove(ul.indexOf(num));
+            }else{
+                //adding element to unique list and map for the first time
+                map.put(num,1);
+                ul.add(num);
+        }
+    }
+    
+    public int showFirstUnique() {
+        if(ul.size()==0)return -1;
+        int num = ul.getFirst();
+        if(map.get(num) == 1)return num;
+        return -1;
+    }
+    
+    public void add(int value) {
+        addVal(value);
+    }
+}
+
+/**
+ * Your FirstUnique object will be instantiated and called as such:
+ * FirstUnique obj = new FirstUnique(nums);
+ * int param_1 = obj.showFirstUnique();
+ * obj.add(value);
+ */
