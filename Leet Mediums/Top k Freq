@@ -1,0 +1,115 @@
+class Solution {
+    
+   class Node{
+       public int val;
+       public int freq;
+       public Node(int val){
+           this.val = val;
+           this.freq = 1;
+       }
+   }
+    
+    public int[] solveUsingQuickSelect(int[] nums, int k){
+        
+        if(k == nums.length)return nums;
+        
+        Map<Integer, Integer> map = new HashMap<>();
+        
+        for(int i=0; i<nums.length; i++){
+           map.put(nums[i], map.getOrDefault(nums[i], 0)+1);
+        }
+        
+        int[] arr = new int[map.size()];
+        int index = 0;
+        for(int n: map.keySet()){
+            arr[index++] = n;
+        }
+        
+        int req_pvt = arr.length-k;
+        solve(arr, 0, arr.length-1, req_pvt, map);
+        
+        int res[] = new int[k];
+        System.out.println(Arrays.toString(nums));
+       int count = 0;
+       int i = arr.length-1;
+       while(count<k){
+            res[count++] = arr[i--];
+        }
+        return res;
+    }
+    
+    public void solve(int[] nums, int low, int high, int req_pvt, Map<Integer, Integer> map){
+        if(low >=high )return;
+        
+        int pivot = low+ (new Random()).nextInt(high-low);
+        int pvt_loc = partition(low, high, pivot, nums, map);
+        
+        if(pvt_loc == req_pvt)return;
+        else if(pvt_loc<req_pvt){
+            solve(nums, pvt_loc+1, high, req_pvt, map);
+        }else{
+            solve(nums, low, pvt_loc, req_pvt, map);
+        }
+    }
+    
+    public void swap(int[] nums, int x, int y){
+        System.out.println(x+" "+y);
+        int temp = nums[x];
+        nums[x] = nums[y];
+        nums[y] = temp;
+    }
+    
+    public int partition(int low, int high, int pivot_index, int[] nums, Map<Integer, Integer> map){
+      //  if(low<0 || high>=nums.length || low>=nums.length || high<0)return 0;
+        int pivot = nums[pivot_index];
+        swap(nums, high, pivot_index);
+        
+        int pos = low;
+        for(int i=low; i<high; i++){
+            if(map.get(nums[i])<map.get(pivot)){ //partition based on frequencies
+                swap(nums, pos, i);
+                pos++;
+            }
+        }
+        
+        swap(nums, high, pos);
+        return pos;
+    }
+    
+    public int[] topKFrequent(int[] nums, int k) {
+        return solveUsingQuickSelect(nums, k);
+       
+    }
+    
+    public int[] usingPriorityQueue(int[] nums, int k){
+         int[] res = new int[k];
+        
+       PriorityQueue<Node> queue = new PriorityQueue<>(new Comparator<Node>(){
+           public int compare(Node a, Node b){
+               return -Integer.compare(a.freq, b.freq);
+           }
+       });
+       
+        Map<Integer, Node> map = new HashMap<>();
+        
+       for(int num:nums){
+           if(map.containsKey(num)){
+               Node n = map.get(num);
+               queue.remove(n);
+               
+               n.freq++;
+               
+               queue.add(n);
+           }else{
+               Node n =new Node(num);
+               map.put(num, n);
+               queue.add(n);
+           }
+       }
+        
+        for(int i=0; i<k; i++){
+            res[i] = queue.remove().val;
+        }
+        return res;
+    }
+}
