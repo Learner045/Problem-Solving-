@@ -1,0 +1,16 @@
+
+Map<Integer, Integer> map = new HashMap<>(); //frequency map
+
+for(int num: nums){
+map.put(num, map.getOrDefault(num, 0)+1);
+}
+
+PriorityQueue<Integer> queue = new PriorityQueue<>( (a,b)-> map.get(a)-map.get(b) ); //prority queue on the basis of frequency
+
+
+for(int n: map.keySet()){
+
+queue.add(n);
+
+}
+
