@@ -1,0 +1,72 @@
+class Solution {
+    int n;
+    int m;
+    int direcx[];
+    int direcy[];
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        
+        this.n = maze.length;
+        this.m = maze[0].length;
+        
+        int st_row = start[0];
+        int st_col = start[1];
+        int dest_row = destination[0];
+        int dest_col = destination[1];
+        
+        if(maze[dest_row][dest_col] == 1)return false;
+        
+        
+        //right, down, left, top
+        direcx = new int[]{1, 0, -1, 0};
+        direcy = new int[]{0, 1, 0, -1};
+        
+        boolean[][] visited = new boolean[n][m];
+        boolean found = solve(maze, st_row, st_col, dest_row, dest_col, visited);
+        return found;
+    }
+    
+    
+    public boolean solve(int[][] maze, int srow, int scol, int drow, int dcol, boolean[][]visited){
+        if(srow<0 || scol<0 || drow<0 || dcol<0 || srow>=n || drow>=n || scol>= m || dcol>=m)return false;
+        
+        if(srow == drow && scol == dcol)return true;
+        
+        if(maze[srow][scol] == 1)return false; //wall
+        
+        if(visited[srow][scol])return false;
+            
+        visited[srow][scol] = true;
+        
+        //keep going right
+        int r = scol+1;
+        while(r<m && maze[srow][r]==0){
+            r++;
+        }
+        
+        if(solve(maze, srow, r-1, drow, dcol, visited))return true;
+        
+        //keep going left
+        int l = scol-1;
+        while(l>=0 && maze[srow][l]==0){
+            l--;
+        }
+        if(solve(maze, srow, l+1, drow, dcol, visited))return true;
+        
+        //keep going up
+        int up = srow-1;
+        while(up>=0 && maze[up][scol]==0){
+            up--;
+        }
+        if(solve(maze, up+1, scol, drow, dcol, visited))return true;
+        
+        //keep going down
+        int down = srow+1;
+        while(down<n && maze[down][scol]==0){
+            down++;
+        }
+        
+         if(solve(maze, down-1, scol, drow, dcol, visited))return true;
+        
+        return false;
+    }
+}
