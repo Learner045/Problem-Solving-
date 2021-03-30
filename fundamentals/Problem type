@@ -1,0 +1,5 @@
+For Questions such as top k frequent, k largest, k smallest, kth largest, kthsmallest ,kth something
+use Quick Select which is a variation of quick sort
+gives average complexity of O(N)
+
+
