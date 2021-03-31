@@ -1,0 +1,43 @@
+/*
+Input: nums = [1,2,3,3,4,4,5,5]
+Output: true
+Explanation:
+You can split them into two consecutive subsequences : 
+1, 2, 3, 4, 5
+3, 4, 5
+*/
+
+class Solution {
+    
+    
+    public boolean isPossible(int[] nums) {
+        
+        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> tails = new HashMap<>();
+        
+        for(int n:nums){
+            map.put(n, map.getOrDefault(n,0)+1);
+        }
+        
+        for(int num: nums){
+            if(map.get(num)==0)continue; //already utilized this number
+            else if(tails.containsKey(num) && tails.get(num)>0){
+                //you have this number as a potential tail so utilize it
+                tails.put(num, tails.get(num)-1);
+                tails.put(num+1, tails.getOrDefault(num+1, 0)+1); //also add a potential tail of this tail
+            }else if(map.containsKey(num+1) && map.get(num+1)>0 && map.containsKey(num+2) && map.get(num+2)>0){
+                //you have next 2 needed numbers
+                map.put(num+1, map.get(num+1)-1);
+                map.put(num+2, map.get(num+2)-1);
+                tails.put(num+3, tails.getOrDefault(num+3, 0)+1); //add a potential tail to this series
+                
+            }else{
+                //you dont have 3 sequence numbers 
+                return false;
+            }
+            map.put(num, map.getOrDefault(num,0)-1);
+        }
+        
+        return true;
+    }
+}
