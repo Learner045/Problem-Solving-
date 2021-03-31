@@ -1,0 +1,56 @@
+class UndergroundSystem {
+
+    class CustomerNode{
+        public String checkCity;
+        public int checkIn;
+        public CustomerNode(String city, int checkIn){
+            this.checkCity = city;
+            this.checkIn = checkIn;
+        }
+        
+    }
+    
+  
+    Map<Integer, CustomerNode> map;
+    Map<String, Pair<Integer, Integer>> timeDetailMap;
+    
+    public UndergroundSystem() {
+        map = new HashMap<>();
+        timeDetailMap = new HashMap<>();
+    }
+    
+    public void checkIn(int id, String stationName, int t) {
+        map.put(id, new CustomerNode(stationName, t));
+        
+    }
+    
+    public void checkOut(int id, String stationName, int t) {
+        String checkInSt = map.get(id).checkCity;
+        int checkInTime = map.get(id).checkIn;
+        String key = checkInSt.toLowerCase()+" "+stationName.toLowerCase();
+        if(timeDetailMap.containsKey(key)){
+            Pair<Integer, Integer> pair = timeDetailMap.get(key); //total time and count
+            int totaltime = pair.getKey()+(t-checkInTime);
+            int count = pair.getValue()+1;
+            timeDetailMap.remove(key);
+            timeDetailMap.put(key, new Pair<>(totaltime, count));
+        }else{
+            Pair<Integer, Integer> pair = new Pair((t-checkInTime), 1);
+            timeDetailMap.put(key,pair);
+        }
+    }
+    
+    public double getAverageTime(String startStation, String endStation) {
+        String key = startStation.toLowerCase()+" "+endStation.toLowerCase();
+        Pair<Integer, Integer> pair = timeDetailMap.get(key);
+        return (double)pair.getKey()/pair.getValue();
+    }
+}
+
+/**
+ * Your UndergroundSystem object will be instantiated and called as such:
+ * UndergroundSystem obj = new UndergroundSystem();
+ * obj.checkIn(id,stationName,t);
+ * obj.checkOut(id,stationName,t);
+ * double param_3 = obj.getAverageTime(startStation,endStation);
+ */
