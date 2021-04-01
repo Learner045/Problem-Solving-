@@ -15,3 +15,7 @@ eg. nums[i] - nums[j] == k
          }
          
    
+  DeMorgan's law of negation
+   no overlap
+  start1 >= end2 or end1 <= start2
+  overlap if start1 < end2 and end1 > start2
