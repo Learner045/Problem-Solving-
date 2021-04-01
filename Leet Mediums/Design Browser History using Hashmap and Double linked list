@@ -1,0 +1,71 @@
+class BrowserHistory {
+
+    class Node{
+        int index;
+        String name;
+        Node next;
+        Node prev;
+        public Node(int index, String name){
+            this.index = index;
+            this.name = name;
+            next = null;
+            prev = null;
+        }
+    }
+    Map<Integer, Node> map;
+    int index = 0;
+    Node root;
+    public BrowserHistory(String homepage) {
+        map = new HashMap<>();
+        root = new Node(-1, ""); //dummy node
+        Node n = new Node(index, homepage);
+        root.next = n;
+        n.prev = root;
+        map.put(index, n);
+        
+    }
+    
+    public void visit(String url) {
+        index++;
+       // System.out.println(map.toString());
+        Node node = new Node(index, url);
+     
+        Node prev = map.get(index-1);
+     //   System.out.println(index-1);
+        node.prev = prev;
+        Node next = null;
+        
+        if(prev!=null){
+            next = prev.next;
+            prev.next = node;
+        }
+
+        while(next!=null){
+            map.remove(next.index);
+            next = next.next;
+        }
+        map.put(index, node);
+       // map.keySet().removeIf(key -> key > index); //If you try to remove in java7 way, you get ConcurrentModificationException
+    }
+    
+    public String back(int steps) {
+        index -= steps;
+        if(index<0)index = 0;
+        return map.get(index).name;
+    }
+    
+    public String forward(int steps) {
+        index+= steps;
+        if(index>=map.size())index = map.size()-1;
+        return map.get(index).name;
+        
+    }
+}
+
+/**
+ * Your BrowserHistory object will be instantiated and called as such:
+ * BrowserHistory obj = new BrowserHistory(homepage);
+ * obj.visit(url);
+ * String param_2 = obj.back(steps);
+ * String param_3 = obj.forward(steps);
+ */
