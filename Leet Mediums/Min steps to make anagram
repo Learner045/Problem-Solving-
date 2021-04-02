@@ -1,0 +1,24 @@
+class Solution {
+    public int minSteps(String s, String t) {
+        int[] lowers = new int[26];
+        
+        Arrays.fill(lowers, 0);
+        
+        for(int i=0; i<s.length(); i++){
+            char c = s.charAt(i);
+            lowers[c-'a']++;
+        }
+           
+        for(int i=0; i<t.length(); i++){
+            char c = t.charAt(i);
+            lowers[c-'a']--;
+        }
+        
+        int diff = 0;
+        for(int i=0; i<26; i++){
+            diff += Math.abs(lowers[i]);
+        }
+        
+        return diff/2;
+    }
+}
