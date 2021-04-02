@@ -1,0 +1,66 @@
+class Leaderboard {
+
+    Map<Integer, Pair<Integer, Integer>> map;
+    PriorityQueue<Pair<Integer, Integer>> pq;
+    public Leaderboard() {
+        map = new HashMap<>();
+        pq = new PriorityQueue<>( (a,b)->-Integer.compare(a.getValue(), b.getValue()) );
+    }
+    
+    //o logn
+    public void addScore(int playerId, int score) {
+        if(map.size()==0 || !map.containsKey(playerId)){
+            Pair<Integer, Integer> pair = new Pair<>(playerId, score);
+            map.put(playerId, pair);
+            pq.add(pair);
+        }else{
+            Pair<Integer, Integer> pair = map.get(playerId);
+            pq.remove(pair);
+            
+            int val = pair.getValue()+score;
+            
+            pair = new Pair<>(playerId, val);
+            map.put(playerId, pair);
+            pq.add(pair);
+            
+        }
+        
+    }
+    
+    //klogn
+    public int top(int K) {
+     
+        Integer score = 0;
+        int count = K;
+        
+        List<Pair<Integer, Integer>> list = new ArrayList<>();
+        //k
+        while(!pq.isEmpty()){
+            Pair<Integer, Integer> p = pq.poll();
+            list.add(p);
+            score+= p.getValue();
+            count--;
+            if(count == 0)break;
+        }
+        
+        //klogn
+        for(Pair<Integer, Integer> p: list)pq.add(p);
+        
+        return score;
+    }
+    
+    //logn
+    public void reset(int playerId) {
+        Pair<Integer, Integer> pair = map.get(playerId);
+        map.remove(playerId);
+        pq.remove(pair);
+    }
+}
+
+/**
+ * Your Leaderboard object will be instantiated and called as such:
+ * Leaderboard obj = new Leaderboard();
+ * obj.addScore(playerId,score);
+ * int param_2 = obj.top(K);
+ * obj.reset(playerId);
+ */
