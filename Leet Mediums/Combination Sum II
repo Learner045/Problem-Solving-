@@ -1,0 +1,43 @@
+class Solution {
+    List<List<Integer>> list;
+    int n;
+    int k ;
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        list = new ArrayList<>();
+        this.n = n;
+        this.k = k;
+        int[] arr = new int[9];
+        for(int i=0; i<9; i++){
+            arr[i] = i+1;
+        }
+        
+        solve(arr, new ArrayList<>(), -1, 0);
+        return list;
+    }
+    
+    
+    public void solve(int arr[], List<Integer> set, int index, int sum){
+        if(index>=arr.length)return;
+    
+        if(sum > n || set.size()>k)return;
+        
+        if(sum == n && set.size() == k){
+           List<Integer> copy = new ArrayList<>(set);
+           list.add(copy);
+            return;
+            
+        }
+        
+        
+        for(int i=index+1; i<arr.length; i++){
+            set.add(arr[i]);
+            solve(arr, set, i, sum+arr[i]);
+            set.remove(set.size()-1);
+            
+        }
+        
+        
+    }
+    
+    
+}
