@@ -15,7 +15,12 @@ eg. nums[i] - nums[j] == k
          }
          
    
-  DeMorgan's law of negation
+2)  DeMorgan's law of negation
    no overlap
   start1 >= end2 or end1 <= start2
   overlap if start1 < end2 and end1 > start2
+
+3)TreeMap data structure (java) which uses the balanced-binary-search tree.
+
+The great advantage we get with a balanced BST is that the search/add/remove operations are all bounded by a logarithmic complexity
+in terms of the number of elements in the tree. This is achievable due to the structure of the tree and the relationship between the subtrees and a root.
