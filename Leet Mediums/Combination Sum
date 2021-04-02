@@ -1,0 +1,44 @@
+class Solution {
+    
+    List<List<Integer>> list;
+    int n;
+    int k ;
+    
+    public List<List<Integer>> combinationSum(int[] candidates, int target)     {       
+        list = new ArrayList<>();
+        this.n = target;
+       
+                                                                        
+        Arrays.sort(candidates);
+        solve(candidates, new ArrayList<>(), 0, 0);
+        return list;
+        
+    }
+     
+    public void solve(int arr[], List<Integer> set, int index, int sum){
+        if(index>arr.length)return;
+    
+        if(sum > n)return;
+        
+        if(sum == n){
+           List<Integer> copy = new ArrayList<>(set);
+           list.add(copy);
+            return; 
+        }
+        
+
+        for(int i=index; i<arr.length; i++){
+        
+            int currSum = sum+arr[i];
+            if(currSum<=n){
+                set.add(arr[i]);
+                solve(arr, set, i, sum+arr[i]);
+                set.remove(set.size()-1);
+            }else{
+                return;
+            }
+          
+        }
+        
+    }
+}
