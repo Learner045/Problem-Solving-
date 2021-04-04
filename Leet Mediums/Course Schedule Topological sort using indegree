@@ -1,0 +1,62 @@
+class Solution {
+    
+    class Node{
+        public int indeg = 0;
+        public List<Integer> outnodes;
+        public Node(){
+            outnodes = new ArrayList<>();
+        }
+      
+        
+    }
+    Map<Integer, Node> map;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        
+        map = new HashMap<>();
+        
+        for(int[] arr: prerequisites){
+            Node prev, next;
+            if(map.containsKey(arr[0])){
+                prev = map.get(arr[0]);
+            }else{
+                prev = new Node();
+            }
+            
+            if(map.containsKey(arr[1])){
+                next = map.get(arr[1]);
+            }else{
+                next = new Node();
+            }
+            
+            next.indeg++;
+            prev.outnodes.add(arr[1]);
+            map.put(arr[0], prev);
+            map.put(arr[1], next);
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        
+        for( int key: map.keySet()){
+            if(map.get(key).indeg == 0)
+                queue.add(key);
+        }
+        
+        int edgesProcessed = 0;
+        while(!queue.isEmpty()){
+            int curr = queue.poll();
+            if(!map.containsKey(curr))continue;
+            Node node = map.get(curr);
+            
+            for(int neighbor: node.outnodes){
+                if(!map.containsKey(neighbor))continue;  //node is a leaf
+                Node neigh = map.get(neighbor);
+                edgesProcessed++;
+                neigh.indeg--;
+                if(neigh.indeg == 0)queue.add(neighbor);
+            }
+        }
+        
+        if(edgesProcessed == prerequisites.length)return true;
+        return false;
+    }
+}
