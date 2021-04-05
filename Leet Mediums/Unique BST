@@ -1,0 +1,45 @@
+class Solution {
+    
+    int memo[];
+    int n;
+  
+    public int numTrees(int n) {
+        if(n == 0 || n == 1)return n;
+        memo = new int[n+1];
+        this.n = n;
+        Arrays.fill(memo, 0);
+        
+      //  memo[0] = 1;
+        memo[1] = 1;
+        memo[2] = 2;
+        
+        countTrees(n);
+        
+        System.out.println(Arrays.toString(memo));
+        return memo[n];
+    }
+    
+    public int countTrees(int numNodes){
+      //  System.out.println(numNodes);
+        
+        if(numNodes <= 0)return 1;
+  
+        if(memo[numNodes] != 0){
+           // System.out.println("count found for "+numNodes);
+            return memo[numNodes];
+        }
+        int res = 0;
+        for(int r = 1; r<=numNodes; r++){
+           // System.out.println("count1 "+(r-1)+" count2 "+(numNodes-r));
+            int count1 = countTrees(r-1);
+            int count2 = countTrees(numNodes - r);
+            
+            
+            res+= count1*count2;
+            System.out.println(res);
+        }
+       // System.out.println(numNodes+" "+res);
+        memo[numNodes] = res;
+        return memo[numNodes];
+    }
+}
