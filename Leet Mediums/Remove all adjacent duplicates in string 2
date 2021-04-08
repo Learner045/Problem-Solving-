@@ -1,0 +1,49 @@
+/*
+Input: s = "deeedbbcccbdaa", k = 3
+Output: "aa"
+Explanation: 
+First delete "eee" and "ccc", get "ddbbbdaa"
+Then delete "bbb", get "dddaa"
+Finally delete "ddd", get "aa"
+*/
+
+class Solution {
+    
+    Stack<String[]> stack;
+    public String removeDuplicates(String s, int k) {
+        stack = new Stack<>();
+        
+        int count = 0;
+        
+        for(char c: s.toCharArray()){
+           
+            if(!stack.isEmpty() && stack.peek()[0].equals(c+"")){
+               count = Integer.parseInt(stack.peek()[1]);
+       
+               if(count == k-1){
+                   stack.pop();
+               }else{
+                   String[] pair = stack.pop();
+                   count = Integer.parseInt(pair[1])+1;
+               
+                   stack.push(new String[]{ (c+""), (count+"")});
+               }
+            }else{
+                String[] pair = new String[]{ (c+""), "1"};
+                stack.push(pair);
+            }
+            
+         //   if(!stack.isEmpty())System.out.println(stack.peek());
+       
+        }
+        
+        StringBuilder res = new StringBuilder();
+        while(!stack.isEmpty()){
+            String[] pair = stack.pop();
+            for(int i=0; i<Integer.parseInt(pair[1]);i++){
+                res.append(pair[0]);
+            }
+        }
+        return res.reverse().toString();
+    }
+}
