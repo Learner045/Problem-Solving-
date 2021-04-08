@@ -1,0 +1,43 @@
+/*
+Input: graph = [[1,2,3],[2],[3],[]]
+Output: [[0,1,2,3],[0,2,3],[0,3]]
+*/
+
+
+class Solution {
+    List<List<Integer>> result;
+    int[][] graph;
+    int src;
+    int dest;
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+        result = new ArrayList<>();
+        this.graph = graph;
+        
+        this.src = 0;
+        this.dest = graph.length-1;
+        
+        List<Integer> intmd = new ArrayList<>();
+        intmd.add(src);
+        solve(intmd, src);
+        return result;
+    }
+    
+    public void solve(List<Integer> intmd, int src){
+        if(src>dest)return;
+        
+        if(src == dest){
+            System.out.println(intmd);
+            result.add(new ArrayList<>(intmd));//copying the list
+            return;
+        }
+        
+      
+        for(int child: graph[src]){
+           intmd.add(child);
+           solve(intmd, child);
+            intmd.remove(intmd.size()-1);
+        }
+        
+       
+    }
+}
