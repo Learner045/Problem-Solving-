@@ -1,0 +1,34 @@
+class Solution {
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        
+        int count = 0;
+        
+        for(int num: nums)if(num<k)count++;
+        
+        for(int len=2; len<nums.length+1; len++){
+            long currProd = 1;
+            boolean exists = false;
+            currProd = findProd(nums, 0, len);
+            
+            if(currProd<k){count++;}
+            
+            for(int i=1;i<=nums.length-len; i++){
+                
+                
+                currProd*=(nums[i+len-1]);
+                currProd/=nums[i-1];
+                
+                if(currProd<k && currProd>0){exists = true; System.out.println(currProd);count++;}
+            }
+            if(!exists)break;
+        }
+        return count;
+    }
+    
+    public long findProd(int[] nums, int st, int end){
+        long prod = 1;
+        for(int i=st; i<end; i++)prod*=nums[i];
+        
+        return prod;
+    }
+}
