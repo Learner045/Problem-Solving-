@@ -1,0 +1,26 @@
+class Solution {
+    public int missingElement(int[] nums, int k) {
+        
+        for(int i=0; i+1<nums.length; i++){
+            int n1 = nums[i];
+            int n2 = nums[i+1];
+            
+            int miss = countMissing(n1, n2);
+            if(miss>=k){
+                //falls in this range
+                return n1+k;
+            }else{
+                k-=miss;
+            } 
+        }
+        
+        
+        return nums[nums.length-1]+k;
+    }
+    
+    public int countMissing(int num1, int num2){
+        int miss = num2-num1-1;
+        if(miss<0)return 0;
+        return miss;
+    }
+}
