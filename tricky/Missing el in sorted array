@@ -1,0 +1,26 @@
+class Solution {
+    
+    public int missCount(int[] nums, int idx){
+        return nums[idx]-nums[0]-idx;
+    }
+    
+    public int missingElement(int[] nums, int k) {
+        
+        int n = nums.length-1;
+        if(k>missCount(nums,n)){
+            int count = missCount(nums, n);
+            return nums[n] + k-count;
+        }
+        
+        int left = 0;
+        int right = n;
+        while(left != right){
+            int mid = left+(right-left)/2;
+            
+            if(missCount(nums,mid)<k)left = mid+1;
+            else right = mid;
+        }
+        
+      return nums[left-1]+ k-missCount(nums, left-1);
+    }
+}
