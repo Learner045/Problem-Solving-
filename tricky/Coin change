@@ -1,0 +1,54 @@
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        
+        int[] memo = new int[amount+1];
+        Arrays.fill(memo, 0);
+        
+        int min = coinChangeMemoized(coins, amount, memo);
+        
+        return min;
+    }
+    
+    public int coinChangeDP(int[] coins, int amount){
+        int[] dp = new int[amount+1];
+        Arrays.fill(dp, (amount+1));
+        dp[0] = 0;
+        
+        for(int amt = 1; amt<= amount; amt++){
+            for(int idx = 0; idx< coins.length; idx++){
+                if(coins[idx]<=amt){
+                    dp[amt] = Math.min(dp[amt], dp[amt - coins[idx]]+1);
+                }
+            }
+        }
+        
+        if(dp[amount]> amount)return -1;
+        return dp[amount];
+    }
+    
+    public int coinChangeMemoized(int[] coins, int rem, int[] memo){
+        
+        if(rem == 0)return 0; //we could make the amount
+        
+        if(rem<0)return -1; //our val exceeded amount
+        
+        if(memo[rem]!=0)return memo[rem]; //amount previously made
+        
+        int min = Integer.MAX_VALUE;
+        
+        for(int i=0; i<coins.length; i++)
+        {
+            int res = coinChangeMemoized(coins, rem-coins[i], memo);
+            
+            if(res>=0 && res<min){
+                min = res+1;
+            }
+        }
+        
+        memo[rem] = (min==Integer.MAX_VALUE)?-1: min;
+        return memo[rem];
+    }
+}
+
+
+https://stackoverflow.com/questions/54993450/coin-change-dynamic-programming-question-top-down-memoization-approach
