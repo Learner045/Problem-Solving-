@@ -12,7 +12,7 @@ class PeekingIterator implements Iterator<Integer> {
 	
     // Returns the next element in the iteration without advancing the iterator.
 	public Integer peek() {
-        if(nextEl!=-1)return nextEl;
+        if(nextEl!=-1)return nextEl; //already peaking into next el
         
         this.nextEl = it.next();
         return nextEl;
@@ -23,17 +23,17 @@ class PeekingIterator implements Iterator<Integer> {
 	@Override
 	public Integer next() {
         if(nextEl == -1){
-            return it.next();
+            return it.next(); //cursor is not pointing to next el already
         }else{
-	     int el = nextEl;
-         nextEl = -1;
+	     int el = nextEl; //cursor is already pointing to next el, so process it
+         nextEl = -1; //reset nextEl as already processed
          return el;
         }
 	}
 	
 	@Override
 	public boolean hasNext() {
-        if(nextEl!=-1)return true;
+        if(nextEl!=-1)return true; //if there is a nextEl to process, we still have elements
 	    return it.hasNext();
 	}
 }
