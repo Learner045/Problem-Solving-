@@ -1,0 +1,78 @@
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * public interface NestedInteger {
+ *
+ *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     public boolean isInteger();
+ *
+ *     // @return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // Return null if this NestedInteger holds a nested list
+ *     public Integer getInteger();
+ *
+ *     // @return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // Return empty list if this NestedInteger holds a single integer
+ *     public List<NestedInteger> getList();
+ * }
+ */
+
+import java.util.*;
+public class NestedIterator implements Iterator<Integer> {
+
+    Iterator<NestedInteger> it;
+    Deque<Iterator<NestedInteger>> queue = new ArrayDeque<>();
+    Integer peeked = null;
+    
+    
+    public NestedIterator(List<NestedInteger> nestedList) {
+        it = nestedList.iterator();
+        queue.add(it);
+    }
+
+    @Override
+    public Integer next() {
+        if(!hasNext())throw new NoSuchElementException();
+        
+        Integer el = peeked;
+        peeked = null;
+        return el;
+        
+    }
+
+    public void setPeek(){
+        
+        if(peeked!=null)return; //peeked is already pointing to an Integer
+        
+        while( queue.size()>0 ){
+            
+            if( !queue.peekFirst().hasNext()){queue.removeFirst();continue;}
+            
+           
+      
+            NestedInteger el = queue.peekFirst().next();
+            
+            if(el.isInteger()){
+                peeked = el.getInteger();
+                return;
+            }
+            
+            //else it is a list
+            Iterator<NestedInteger> itrx = el.getList().iterator();
+            queue.addFirst(itrx);
+        }
+    }
+    
+    
+    @Override
+    public boolean hasNext() {
+        setPeek();
+        if(peeked == null)return false;
+        return true;
+    }
+}
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i = new NestedIterator(nestedList);
+ * while (i.hasNext()) v[f()] = i.next();
+ */
