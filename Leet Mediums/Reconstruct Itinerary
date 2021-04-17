@@ -1,0 +1,45 @@
+class Solution {
+    
+    Map<String, LinkedList<String>> map;
+    public List<String> findItinerary(List<List<String>> tickets) {
+        
+        map = new HashMap<>();
+        
+        for(List<String> pairs: tickets){
+            String cityFrom = pairs.get(0);
+            String cityTo = pairs.get(1);
+            
+            if(map.containsKey(cityFrom)){
+                LinkedList<String> neighbors = map.get(cityFrom);
+                neighbors.add(cityTo);
+                map.put(cityFrom, neighbors);
+            }else{
+                LinkedList<String> neighbors = new LinkedList<>();
+                neighbors.add(cityTo);
+                map.put(cityFrom, neighbors);
+            }
+        }
+        
+        this.map.forEach( (key, value)-> Collections.sort(value));
+        
+        LinkedList<String> res = new LinkedList<>();
+     
+        solve("JFK", res);
+        
+        return res;
+    }
+    
+    public void solve(String city, LinkedList<String> res){
+        
+        if(map.containsKey(city)){
+        LinkedList<String> des = map.get(city);
+        while(!des.isEmpty()){
+            String destination = des.removeFirst();
+            solve(destination, res);
+        }
+        }
+        
+        res.addFirst(city);
+    }
+    
+}
