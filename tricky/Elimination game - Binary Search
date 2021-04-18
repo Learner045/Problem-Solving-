@@ -1,0 +1,31 @@
+class Solution {
+    public int lastRemaining(int n) {
+        
+        int left = 1;
+        int right = n;
+        
+        int remaining = n;
+        int step = 2;
+        boolean leftDir = true;
+        
+        while(left<right){
+            if(leftDir){
+                if(remaining%2 == 1){
+                    right -= step/2;
+                }
+                left+= step/2;
+                leftDir = false;
+            }else{
+                if(remaining%2 == 1){
+                    left += step/2;
+                }
+                right -= step/2;
+                leftDir = true;
+            }
+            step *= 2;
+            remaining /= 2;
+        }
+        
+        return left;
+    }
+}
