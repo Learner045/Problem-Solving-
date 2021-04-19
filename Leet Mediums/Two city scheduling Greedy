@@ -1,0 +1,52 @@
+/*
+Input: costs = [[10,20],[30,200],[400,50],[30,20]]
+Output: 110
+Explanation: 
+The first person goes to city A for a cost of 10.
+The second person goes to city A for a cost of 30.
+The third person goes to city B for a cost of 50.
+The fourth person goes to city B for a cost of 20.
+
+The total minimum cost is 10 + 30 + 50 + 20 = 110 to have half the people interviewing in each city.
+*/
+
+class Solution {
+    public int twoCitySchedCost(int[][] costs) {
+        
+        Arrays.sort(costs, (int[] a, int[] b)->  Integer.compare(Math.abs(b[0]-b[1]), Math.abs(a[0]-a[1])));
+        
+       // for(int[] arr: costs)System.out.println(Arrays.toString(arr));
+        
+        // 400,50   30,200   30,10  10,20
+        
+        int a = 0;
+        int b = 0;
+        int n = costs.length;
+        
+        int total = 0;
+        
+        for(int i=0; i<costs.length; i++){
+            if(costs[i][0] < costs[i][1] ){
+                if(a<n/2){
+                    total+= costs[i][0];
+                    a++;
+                }else{
+                    total+= costs[i][1];
+                    b++;
+                }
+            }else{
+                if(b<n/2){
+                    total+= costs[i][1];
+                    b++;
+                }else{
+                    total+= costs[i][0];
+                    a++;
+                }
+            }
+        }
+        
+        System.out.println(a+" "+b);
+        return total;
+        
+    }
+}
