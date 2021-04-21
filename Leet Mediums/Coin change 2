@@ -1,0 +1,46 @@
+class Solution {
+    public int change(int amount, int[] coins) {
+        
+        //int res = makeAmountBrute(amount, 0, 0, coins);
+        
+        int res = DP(coins, amount);
+        return res;
+    }
+    
+    public int makeAmountBrute(int amount, int curr, int index, int[] coins){
+        if(amount == curr)return 1;
+        if(curr>amount)return 0;
+        if(index == coins.length){
+            return 0;
+        }
+        
+        int c = 0, c2 = 0;
+        
+        //take
+        c = makeAmountBrute(amount, curr+coins[index], index, coins);
+            
+        //don't take
+        c2 = makeAmountBrute(amount, curr, index+1, coins);
+        
+        return c+c2;
+        
+    }
+    
+    public int DP(int[] coins, int amt){
+        int[] dp = new int[amt+1];
+        Arrays.fill(dp, 0);
+        dp[0] = 1;
+        
+        
+            for(int coin = 0; coin<coins.length; coin++){
+                for(int a = 1; a<= amt; a++){
+                    
+                if(a< coins[coin])continue; // coin is eg. 5 and amt we are trying to make is 2
+                
+                dp[a] += dp[a- coins[coin]];
+            }
+        }
+        
+        return dp[amt];
+    }
+}
