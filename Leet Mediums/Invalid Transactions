@@ -1,0 +1,56 @@
+class Solution {
+    
+    class Transaction{
+        String name;
+        int time;
+        int amount;
+        String city;
+        
+        public Transaction(String st){
+            String parts[] = st.split(",");
+            this.name = parts[0];
+            this.time = Integer.parseInt(parts[1]);
+            this.amount = Integer.parseInt(parts[2]);
+            this.city = parts[3];
+        }
+        
+        public boolean isInvalid(Transaction t){
+            if(t.name.compareTo(this.name) == 0 && t.city.compareTo(this.city)!=0 && Math.abs(this.time - t.time)<= 60)return true;
+            
+            return false;
+        }
+    }
+    
+    Map<String, List<Transaction>>  map;
+    public List<String> invalidTransactions(String[] transactions) {
+        map = new HashMap<>();
+        
+        for(String s: transactions){
+            Transaction t = new Transaction(s);
+            map.computeIfAbsent(t.name, x-> new ArrayList<>()).add(t);
+        }
+        
+        List<String> res = new ArrayList<>();
+        for(String s: transactions ){
+            Transaction t = new Transaction(s);
+            if(!isValidTrans(map.get(t.name), t)){
+                res.add(s);
+            }
+        }
+        
+        return res;
+        
+    }
+    
+    public boolean isValidTrans(List<Transaction> list, Transaction t){
+        if(list.size()<2 && t.amount<=1000)return true;
+        
+        for(Transaction ts: list){
+            if(t.isInvalid(ts))return false;
+        }
+        
+        if(t.amount>1000)return false;
+        
+        return true;
+    }
+}
