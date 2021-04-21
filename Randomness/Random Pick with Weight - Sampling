@@ -1,0 +1,35 @@
+class Solution {
+
+    int[] prefixSum;
+    int sum;
+    public Solution(int[] w) {
+        prefixSum = new int[w.length];
+        
+        int ps = 0;
+        for(int i=0; i<w.length; i++){
+            ps+= w[i];
+            prefixSum[i] = ps;
+        }
+        
+        this.sum = ps;
+        System.out.println(Arrays.toString(prefixSum));
+    }
+    
+    public int pickIndex() {
+        double tgt = sum*Math.random();
+        
+        int i=0;
+        for( i=0; i<prefixSum.length; i++){
+            if (tgt<prefixSum[i])return i;
+        }
+        
+        return i-1;
+        
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(w);
+ * int param_1 = obj.pickIndex();
+ */
