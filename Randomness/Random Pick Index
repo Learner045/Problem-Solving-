@@ -1,0 +1,45 @@
+/*
+Input
+["Solution", "pick", "pick", "pick"]
+[[[1, 2, 3, 3, 3]], [3], [1], [3]]
+Output
+[null, 4, 0, 2]
+
+Explanation
+Solution solution = new Solution([1, 2, 3, 3, 3]);
+solution.pick(3); // It should return either index 2, 3, or 4 randomly. Each index should have equal probability of returning.
+solution.pick(1); // It should return 0. Since in the array only nums[0] is equal to 1.
+solution.pick(3); // It should return either index 2, 3, or 4 randomly. Each index should have equal probability of returning.
+*/
+
+class Solution {
+
+
+    Map<Integer, List<Integer>> idxMap; //num - indices
+    public Solution(int[] nums) {
+   
+        idxMap = new HashMap<>();
+        
+        for(int i=0; i<nums.length; i++){
+            
+        idxMap.computeIfAbsent(nums[i], x->new ArrayList<>()).add(i);
+        }
+
+    }
+    
+    public int pick(int target) {
+        List<Integer> indices = idxMap.get(target);
+        int size = indices.size();
+        
+        Random rand = new Random();
+        
+        int r = rand.nextInt(size);
+        return indices.get(r);
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * int param_1 = obj.pick(target);
+ */
