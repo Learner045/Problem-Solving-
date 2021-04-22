@@ -1,0 +1,52 @@
+/*
+Input: head = [1,2,3,3,4,4,5]
+Output: [1,2,5]
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        
+        ListNode marker = new ListNode(-1);
+        marker.next = head;
+        ListNode prev = marker;
+        ListNode j = head;
+        
+        while(prev!=null && j!=null && j.next!=null){
+            
+            if(j!=null && j.next!=null && j.val != j.next.val){
+                prev.next = j;
+                prev = j;
+                j = j.next;
+              
+            }else{
+                while(j!=null && j.next!=null && j.val == j.next.val){
+                    j = j.next;
+                }
+                if(j!=null){
+                     prev.next = j.next;
+                    j = j.next;
+                 
+                }else{
+                    prev.next = null;
+                    prev = prev.next;
+                   
+                }
+               
+            }
+        
+        }
+        
+        return marker.next;
+        
+    }
+}
