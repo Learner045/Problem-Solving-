@@ -1,0 +1,45 @@
+/*
+Input: s = "cbaebabacd", p = "abc"
+Output: [0,6]
+Explanation:
+The substring with start index = 0 is "cba", which is an anagram of "abc".
+The substring with start index = 6 is "bac", which is an anagram of "abc".
+*/
+
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        
+        int n = s.length();
+        int k = p.length();
+        List<Integer> result = new ArrayList<>();
+        if(k>n) return result;
+        
+        int[] ss = new int[26];
+        int [] pp = new int[26];
+        
+        
+        for(char c: p.toCharArray()){
+            pp[c-'a'] += 1;
+        }
+        
+        for( int i=0; i<k; i++){
+            char c = s.charAt(i);
+            ss[c-'a'] += 1;
+        }
+        
+        if(Arrays.equals(ss, pp))result.add(0);
+        
+        for(int i=1; i+k<=n; i++){
+            
+            char prev = s.charAt(i-1);
+            ss[prev-'a'] -= 1;
+            
+            char curr = s.charAt(i+k-1);
+            ss[curr-'a']+=1;
+            
+            if(Arrays.equals(ss, pp))result.add(i);
+        }
+        
+        return result;
+    }
+}
