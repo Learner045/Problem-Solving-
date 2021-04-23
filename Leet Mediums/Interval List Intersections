@@ -1,0 +1,43 @@
+/*
+Input: firstList = [[0,2],[5,10],[13,23],[24,25]], secondList = [[1,5],[8,12],[15,24],[25,26]]
+Output: [[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]
+*/
+
+class Solution {
+    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+        
+        List<int[]> overlaps = new ArrayList<>();
+        
+        int i=0, j=0;
+        
+        while(i<firstList.length && j<secondList.length){
+            int inv1[] = firstList[i];
+            int inv2[] = secondList[j];
+            
+            if(isOverlap(inv1[0], inv1[1], inv2[0], inv2[1])){
+                int[] overlap = new int[]{Math.max(inv1[0], inv2[0]) , Math.min(inv1[1], inv2[1])};
+                overlaps.add(overlap);
+            }
+            
+            if(inv1[1] < inv2[1])i++;
+            else j++;
+        }
+        
+        int[][] res = new int[overlaps.size()][];
+        int count = 0;
+        for(int[] el: overlaps){
+            res[count] = el;
+            count++;
+        }
+
+
+        
+        return res;
+        
+    }
+    
+    public boolean isOverlap(int s1, int e1, int s2, int e2){
+        if(e1>=s2 && e2>=s1)return true;
+        return false;
+    }
+}
