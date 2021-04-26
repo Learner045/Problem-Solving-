@@ -1,0 +1,85 @@
+class Solution {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        
+        Map<String, Map<String, Double>> graph = new HashMap<>();
+        int i = 0;
+        
+        //Building graph
+        for(List<String> eqs : equations){
+            String x = eqs.get(0);
+            String y = eqs.get(1);
+            double val = values[i];
+            
+            //x - y connection
+            if(graph.containsKey(x)){
+                Map<String, Double> edge = graph.get(x);
+                edge.put(y, val);
+            }else{
+                Map<String, Double> map = new HashMap<>();
+                map.put(y, val);
+                graph.put(x, map);
+            }
+            
+            //y - x connection
+            if(graph.containsKey(y)){
+                Map<String, Double> edge = graph.get(y);
+                edge.put(x, (1/val));
+            }else{
+                Map<String, Double> map = new HashMap<>();
+                map.put(x, (1/val));
+                graph.put(y, map);
+            }
+            
+            i++;
+        }
+        
+        
+        
+        //exec queries
+        double[] result = new double[queries.size()];
+        int idx = 0;
+        for(List<String> query: queries){
+            String numer = query.get(0);
+            String denom = query.get(1);
+            
+            System.out.println(numer+" "+denom);
+            
+            if(!graph.containsKey(numer) || !graph.containsKey(denom)){
+                result[idx] = -1.0;
+            }else if(numer.equals(denom)){
+                result[idx] = 1.0;
+            }else{
+               result[idx] = dfs(numer, denom, graph, 1, new HashSet<>());
+        
+            }
+            
+            idx++;
+        }
+        return result;
+        
+    }
+    
+   public double dfs(String src, String des, Map<String, Map<String, Double>> graph, double val, Set<String> visited){
+       
+       
+       visited.add(src);
+       double res = -1;
+       
+       Map<String, Double> edges = graph.get(src);
+       
+       if(edges.containsKey(des)){
+           return val* edges.get(des);
+       }else{
+           
+           for(Map.Entry<String, Double> entry: edges.entrySet()){
+               String neighbor = entry.getKey();
+               if(visited.contains(neighbor))continue;
+               res = dfs(neighbor, des, graph, val*entry.getValue(), visited);
+               if(res != -1)break;
+           } 
+       }
+       
+       visited.remove(src);
+       return res;
+   }
+}
