@@ -30,3 +30,6 @@ in terms of the number of elements in the tree. This is achievable due to the st
 Note: Arrays.binarySearch() method returns index of the search key, if it is contained in the array, else it returns (-(insertion point) - 1). 
 The insertion point is the point at which the key would be inserted into the array: the index of the first element greater than the key, or a.length
 if all elements in the array are less than the specified key.
+
+
+5)Lookups in a hashset, though requiring a constant time, are expensive compared to the direct memory access.
