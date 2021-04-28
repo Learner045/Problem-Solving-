@@ -1,0 +1,57 @@
+/*
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+*/
+
+class Solution {
+    
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        
+        Arrays.sort(nums);
+        
+        return findKSum(nums, 0, target, 4);
+    }
+    
+    public List<List<Integer>> findKSum(int[] nums, int start, int target, int k){
+        
+        List<List<Integer>> res = new ArrayList<>();
+        
+        if(start == nums.length || nums[start]*k > target || nums[nums.length-1]*k < target)return res;
+        if(k == 2){
+            return find2Sum(nums, start, target);
+        }
+        
+        for(int i=start; i<nums.length; i++){
+            if(i != start && nums[i]==nums[i-1])continue;
+            for(List<Integer> list: findKSum(nums, i+1, target-nums[i], k-1)){
+                List<Integer> l = new ArrayList<>();
+                l.add(nums[i]);
+                l.addAll(list);
+                res.add(l);
+            }
+        }
+        
+        return res;
+        
+    }
+    
+    public List<List<Integer>> find2Sum(int[] nums, int start, int target){
+        Set<List<Integer>> res = new HashSet<>();
+        Set<Integer> seen = new HashSet<>();
+        
+        for(int i=start; i<nums.length; i++){
+            if(seen.contains(target-nums[i])){
+                List<Integer> l = (Arrays.asList(target-nums[i], nums[i]));
+                Collections.sort(l);
+                res.add(l);
+            }
+            
+            seen.add(nums[i]);
+        }
+        
+        return new ArrayList<>(res);
+    }
+    
+    
+}
