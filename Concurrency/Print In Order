@@ -1,0 +1,46 @@
+class Foo {
+
+    public Foo() {
+        
+    }
+    
+    boolean isFirstPrinted;
+    boolean isSecondPrinted;
+
+    public void first(Runnable printFirst) throws InterruptedException {
+        
+        // printFirst.run() outputs "first". Do not change or remove this line. 
+        synchronized(this){
+        printFirst.run();
+        notifyAll();
+        isFirstPrinted = true;
+        }
+        
+    }
+
+    public void second(Runnable printSecond) throws InterruptedException {
+        
+        // printSecond.run() outputs "second". Do not change or remove this line.
+        synchronized(this){
+            while(!isFirstPrinted){
+                wait();
+            }
+        printSecond.run();
+        isSecondPrinted = true;
+            notifyAll();
+        }
+    }
+
+    public void third(Runnable printThird) throws InterruptedException {
+        
+        // printThird.run() outputs "third". Do not change or remove this line.
+        synchronized(this){
+            while(!isSecondPrinted){
+                wait();
+            }
+        printThird.run();
+        
+        }
+        
+    }
+}
