@@ -1,0 +1,35 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+};
+*/
+
+class Solution {
+    public Node inorderSuccessor(Node node) {
+        
+        if(node.right!=null){
+            return leftMostNode(node.right);
+        }
+        
+        Node curr = node;
+        Node prev = null;
+        while(curr!=null && curr.parent!=null){
+            if(curr.parent.left == curr){
+                return curr.parent;
+            }else{
+                curr = curr.parent;
+            }
+        }
+        
+        return prev;
+    }
+    
+    public Node leftMostNode(Node node){
+        if(node.left!=null)return leftMostNode(node.left);
+        else return node;
+    }
+}
