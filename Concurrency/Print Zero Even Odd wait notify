@@ -1,0 +1,81 @@
+class ZeroEvenOdd {
+    private int n;
+    private int index = 1;
+    Semaphore semaphore = new Semaphore(1);
+    boolean prvsZero = false;
+    
+    public ZeroEvenOdd(int n) {
+        this.n = n;
+    }
+
+    // printNumber.accept(x) outputs "x", where x is an integer.
+    public void zero(IntConsumer printNumber) throws InterruptedException {
+        
+        while(indexInRange()){
+            
+           synchronized(this){  
+            
+            if(indexInRange()){
+                
+                 while(prvsZero)this.wait();
+                
+                if(indexInRange())printNumber.accept(0);
+                
+                prvsZero = true;
+                notifyAll();
+            }
+                
+            }
+            
+        }
+    }
+
+    public void even(IntConsumer printNumber) throws InterruptedException {
+          while(indexInRange()){
+            
+            synchronized(this){
+
+            
+            if(indexInRange() ){
+                
+               while(!prvsZero || index%2!=0)this.wait();
+                
+               if(indexInRange() )printNumber.accept(index);
+                prvsZero = false;
+                index++;
+                notifyAll();
+            }
+                 
+             }
+           
+        }
+    }
+
+    public void odd(IntConsumer printNumber) throws InterruptedException {
+        
+        
+         while(indexInRange()){
+            
+           synchronized(this){
+            
+            if(indexInRange() ){
+                
+               while(!prvsZero || index%2==0)this.wait();
+                
+               if(indexInRange())printNumber.accept(index);
+                index++;
+                prvsZero = false;
+                notifyAll();
+            }
+               
+           }
+           
+        }
+    }
+    
+
+    private boolean indexInRange(){
+        if(index<=n)return true;
+        return false;
+    }
+}
