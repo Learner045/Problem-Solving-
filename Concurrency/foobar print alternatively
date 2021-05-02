@@ -1,0 +1,47 @@
+class FooBar {
+    private int n;
+
+    Semaphore foo = new Semaphore(1); //since we want to start with printing out foo first
+    Semaphore bar = new Semaphore(0);
+    Semaphore lock = new Semaphore(1);
+    int index = 1;
+    
+    public FooBar(int n) {
+        this.n = 2*n;
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+        
+        while(index<=n){
+            foo.acquire();
+            
+            lock.acquire(); //for synchronization
+            
+            if(index<=n && index%2!=0)printFoo.run();
+            
+            index++;
+            
+            lock.release();
+            
+            bar.release(); //now that we have printed foo, we need to print bar
+            
+        }
+        
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+        
+       while(index<=n){
+            bar.acquire();
+            
+            lock.acquire();
+            
+            if(index<=n && index%2==0)printBar.run();
+            index++;
+           
+            lock.release();
+            
+            foo.release();
+        }
+    }
+}
