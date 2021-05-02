@@ -1,0 +1,49 @@
+class BoundedBlockingQueue {
+
+    Semaphore enq;
+    Semaphore deq;
+    Semaphore lock;
+    LinkedList<Integer> queue = new LinkedList<>();
+    
+    int capacity;
+    
+    public BoundedBlockingQueue(int capacity) {
+        this.capacity = capacity;
+        enq = new Semaphore(capacity);
+        lock = new Semaphore(1);
+        deq = new Semaphore(0);
+    }
+    
+    public void enqueue(int element) throws InterruptedException {
+        
+        enq.acquire();
+        
+        lock.acquire();
+        
+        queue.addFirst(element);
+        
+        lock.release();
+        
+        deq.release(); //deq semaphore count becomes 1, so now threads can dequeue 
+    }
+    
+    public int dequeue() throws InterruptedException {
+        
+        deq.acquire(); //there are elements to dequeue in the queue
+        
+        lock.acquire();
+        
+        int el = queue.removeLast();
+        
+        lock.release();
+        
+        enq.release(); //we removed 1 el so deq count increases
+        
+        return el;
+        
+    }
+    
+    public int size() {
+        return queue.size();
+    }
+}
