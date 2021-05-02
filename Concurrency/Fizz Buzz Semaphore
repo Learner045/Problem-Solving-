@@ -1,0 +1,58 @@
+class FizzBuzz {
+    private int n;
+    
+    private int index = 1;
+    private Semaphore semaphore = new Semaphore(1);
+
+    public FizzBuzz(int n) {
+        this.n = n;
+    }
+
+    // printFizz.run() outputs "fizz".
+    public void fizz(Runnable printFizz) throws InterruptedException {
+        performTask(printFizz, (index)->index%3==0 && index%5!=0);
+    }
+
+    // printBuzz.run() outputs "buzz".
+    public void buzz(Runnable printBuzz) throws InterruptedException {
+        performTask(printBuzz, (index)->index%5==0 && index%3!=0);
+    }
+
+    // printFizzBuzz.run() outputs "fizzbuzz".
+    public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
+        performTask(printFizzBuzz, (index)->index%5==0 && index%3==0);
+    }
+
+    // printNumber.accept(x) outputs "x", where x is an integer.
+    public void number(IntConsumer printNumber) throws InterruptedException {
+        
+        while(indexInRange()){
+            semaphore.acquire();
+            
+            if(indexInRange() && index%3!=0 && index%5!=0){
+                printNumber.accept(index);
+                index++;
+            }
+            semaphore.release();
+        }
+    }
+    
+    private void performTask(Runnable task, Predicate<Integer> predicate)throws InterruptedException{
+       
+        while(indexInRange()){
+            
+            semaphore.acquire();
+            
+            if(indexInRange() && predicate.test(index)){
+                task.run();
+                index++;
+            }
+            semaphore.release();
+        }
+    }
+    
+    private boolean indexInRange(){
+        if(index<=n)return true;
+        return false;
+    }
+}
