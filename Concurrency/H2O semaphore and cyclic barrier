@@ -1,0 +1,39 @@
+class H2O {
+
+    CyclicBarrier molecule = new CyclicBarrier(3);
+    Semaphore hy = new Semaphore(2);
+    Semaphore oxy = new Semaphore(1);
+        
+    public H2O() {
+        
+    }
+
+    public void hydrogen(Runnable releaseHydrogen) throws InterruptedException {
+		
+        hy.acquire();
+        
+        try{
+           
+            molecule.await();
+            releaseHydrogen.run();
+            hy.release();
+            
+        }catch(BrokenBarrierException e){}
+        // releaseHydrogen.run() outputs "H". Do not change or remove this line.
+       
+    }
+
+    public void oxygen(Runnable releaseOxygen) throws InterruptedException {
+        
+        oxy.acquire();
+        
+        try{
+             molecule.await();
+            releaseOxygen.run();
+            oxy.release();
+        }catch(BrokenBarrierException e){}
+        
+        // releaseOxygen.run() outputs "O". Do not change or remove this line.
+		//releaseOxygen.run();
+    }
+}
