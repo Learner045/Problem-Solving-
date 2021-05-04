@@ -1,0 +1,38 @@
+Problem has tricky edge cases
+
+class Solution {
+    public boolean checkPossibility(int[] nums) {
+        if(nums.length <=2)return true;
+        
+        boolean changed = false;
+   
+        int max = Integer.MIN_VALUE;
+        
+        //increasing seq
+        for(int i=1; i<nums.length; i++){
+          if(i>0 && nums[i]>=nums[i-1] && nums[i]>=max){
+              
+          }else{
+              
+              if(!changed){
+                  if(i-2>=0 && nums[i]>=nums[i-2]){ //we are standing on increasing seq, awkward num is before us
+                      max = nums[i-2];
+                  }else
+                    //if first numbr is awkward, it can be changed to any minimum val
+                    max = (i-1==0)?Integer.MIN_VALUE:nums[i-1]; //we are stannding on an awkward num, there's a seq before it
+                  changed = true;
+                  continue;
+                  
+              }else{
+                  return false;
+              }
+              
+          }
+            max = nums[i];
+        }
+        
+      
+        
+        return true;
+    }
+}
