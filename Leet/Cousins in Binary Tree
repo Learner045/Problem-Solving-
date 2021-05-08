@@ -1,0 +1,68 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    class NodeInfo{
+        Integer val;
+        TreeNode parent;
+        int level;
+        
+        public String toString(){
+            return val+" "+parent.val+" "+level;
+        }
+    }
+    
+    NodeInfo arr[];
+    int idx = 0;
+    TreeNode root;
+    public boolean isCousins(TreeNode root, int x, int y) {
+        arr = new NodeInfo[2];
+        this.root = root;
+        findCousin(null, root, x, y, 0);
+        
+        if(idx<2)return false;
+        
+        if(root.val == x || root.val == y){
+            NodeInfo info = new NodeInfo();
+            info.val = root.val;
+            info.parent = root;
+            info.level = 0;
+            arr[idx++] = info;
+            
+        }
+        
+        System.out.println(arr[0]);
+        System.out.println(arr[1]);
+        
+        if(arr[0].parent != arr[1].parent && arr[0].level == arr[1].level)return true;
+        return false;
+    }
+    
+    public void findCousin(TreeNode parent, TreeNode node, int x, int y, int level){
+        if(idx==2)return;
+        if(node == null)return;
+        if(node!=root && (node.val == x || node.val==y)){
+            NodeInfo info = new NodeInfo();
+            info.val = node.val;
+            info.parent = parent;
+            info.level = level;
+            arr[idx++] = info;
+        }
+        
+        findCousin(node, node.left, x,y, level+1);
+        findCousin(node, node.right, x, y, level+1);
+    }
+}
