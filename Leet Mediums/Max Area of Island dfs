@@ -1,0 +1,54 @@
+class Solution {
+    
+    int direc_x[];
+    int direc_y[];
+    int[][] grid;
+    int maxArea = 0;
+    int m;
+    int n;
+    public int maxAreaOfIsland(int[][] grid) {
+        
+        //right down left up
+        direc_x = new int[]{1, 0, -1, 0};
+        direc_y = new int[]{0, 1, 0, -1};
+        this.grid = grid;
+        this.m = grid.length; //row
+        this.n = grid[0].length; //col
+        
+        
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(grid[i][j] == 1)
+                 visitIsland(i,j);
+            }
+        }
+        
+        return maxArea;
+        
+     }
+    
+    public int visitIsland(int row, int col){
+     //   System.out.println(row+" "+col);
+        if(row<0 || col<0 || row>=m || col>=n)return 0;
+        
+        if(grid[row][col]!=1)return 0;
+        
+        int count = 1;
+       
+        grid[row][col] = 0;
+        
+        for(int i=0; i<direc_x.length; i++){
+            int newRow = row+direc_x[i];
+            int newCol = col+direc_y[i];
+            
+           
+            count += visitIsland(newRow, newCol);
+            
+        }
+        
+        //grid[row][col] = 1; We have already calculated the whole region area and hence when we iterate over the for loop in our above function, we dont want to revisit these cells
+        
+        maxArea = Math.max(maxArea, count);
+        return count;
+    }
+}
