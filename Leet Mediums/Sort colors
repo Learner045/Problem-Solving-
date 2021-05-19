@@ -1,0 +1,20 @@
+class Solution {
+    public void sortColors(int[] nums) {
+        int[] count = new int[3];
+        
+        for(int num: nums){
+            count[num]++;
+        }
+        
+        int idx = 0;
+        for(int i=0; i<nums.length; ){
+            if(count[idx]>0){
+                nums[i] = idx;
+                count[idx]-=1;
+                i++;
+            }else{
+                idx++;
+            }
+        }
+    }
+}
