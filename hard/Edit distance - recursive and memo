@@ -1,0 +1,98 @@
+/*
+Insert a character
+Delete a character
+Replace a character
+Input: word1 = "horse", word2 = "ros"
+Output: 3
+Explanation: 
+horse -> rorse (replace 'h' with 'r')
+rorse -> rose (remove 'r')
+rose -> ros (remove 'e')
+*/
+
+class Solution {
+    
+    Map<String, Integer> map;
+    public int minDistance(String word1, String word2) {
+        map = new HashMap<>();
+        
+        map.put("-", 0);
+        map.put("-"+word2, word2.length());
+        map.put(word1+"-", word1.length());
+        
+        return solveMemo(word1, 0, word2, 0);
+    }
+    
+    
+     public int solveMemo(String wd1, int i, String wd2, int j){
+        
+        if(wd1.equals("") && wd2.equals(""))return 0;
+         
+        else if(wd1.equals("")){
+            
+            return wd2.length();
+        }
+         
+        else if(wd2.equals("")){
+            
+            return wd1.length();
+        }
+         
+        
+         
+        if(i==wd1.length() && j==wd2.length())return 0;
+         
+        else if(i==wd1.length()){
+            map.put("-"+wd2.substring(j), (wd2.length()-j));
+            return (wd2.length()-j);
+        }
+         
+        else if(j==wd2.length()){
+            map.put(wd1.substring(i)+"-", (wd1.length()-i));
+            return (wd1.length()-i);
+        }
+         
+        
+        String key = wd1.substring(i)+"-"+wd2.substring(j);
+         if(map.containsKey(key))return map.get(key);
+        
+       
+        if(wd1.charAt(i) == wd2.charAt(j)){
+            int intmValue = solveMemo(wd1, i+1, wd2, j+1);
+            map.put(key, intmValue);
+            return intmValue;
+        }
+        
+        int min = Integer.MAX_VALUE;
+        
+        min =  1+Math.min(solveMemo(wd1, i+1, wd2, j), Math.min(
+                       solveMemo(wd1, i, wd2, j+1),
+                       solveMemo(wd1, i+1, wd2, j+1)));
+         
+        map.put(key, min);
+        return min;
+        
+    }
+    
+    
+    public int solveBruteForce(String wd1, int i, String wd2, int j){
+        if(wd1.equals("") && wd2.equals(""))return 0;
+        else if(wd1.equals(""))return wd2.length();
+        else if(wd2.equals(""))return wd1.length();
+        
+        
+        if(i==wd1.length() && j==wd2.length())return 0;
+        else if(i==wd1.length())return (wd2.length()-j);
+        else if(j==wd2.length())return (wd1.length()-i);
+        
+        
+        if(wd1.charAt(i) == wd2.charAt(j))return solveBruteForce(wd1, i+1, wd2, j+1);
+        
+        
+        
+        return 1+Math.min(solveBruteForce(wd1, i+1, wd2, j), Math.min(
+                       solveBruteForce(wd1, i, wd2, j+1),
+                       solveBruteForce(wd1, i+1, wd2, j+1)));
+        
+    }
+}
