@@ -1,0 +1,32 @@
+class Solution {
+    
+    Set<String> set;
+    
+    List<String> result;
+    
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        result = new ArrayList<>();
+        set = new HashSet<>(wordDict);
+       
+        
+        solve(0, s, "");
+        return result;
+    }
+    
+    public void solve(int pos, String s, String temp){
+        if(pos>=s.length()){
+            result.add(temp.substring(0, temp.length()-1));
+        }
+    
+        
+        for(int i=pos; i<=s.length(); i++){
+            
+            if(set.contains(s.substring(pos, i))){
+               solve(i, s, temp+s.substring(pos, i)+" ");
+            }
+        }
+        
+      
+    }
+    
+}
