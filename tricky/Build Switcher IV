@@ -1,0 +1,65 @@
+class Solution {
+    
+    public int minFlips(String target) {
+        
+        String presentChar = "0"; //initial configuration
+        
+        //as we go from left to right, we make sure that we flip as required and our configurations are aligning to target 
+        
+        //we go from complete 0s to 1s depending on our previous state which we store in presentchar
+        
+        /*
+         eg. target = 10101
+         00000 initial
+         11111
+          0000
+           111
+            00
+             1
+             ->5
+        */
+        int count = 0;
+        for(int i=0; i<target.length(); i++){
+            
+            String targetChar = target.charAt(i)+"";
+            
+            if(!targetChar.equals(presentChar)){
+                //flip required
+                count++;
+                presentChar = targetChar;
+            }
+        }
+        
+        return count;
+       
+    }
+    
+    //TLE works correctly
+    public int bruteForce(String target){
+        String iConfig = new String(target).replaceAll("[1]","0");
+ 
+        int count = 0;
+        for(int i=0; i<target.length(); i++){
+           // System.out.println(iConfig);
+            if(iConfig.equals(target))return count;
+            
+            if(target.charAt(i) == iConfig.charAt(i))continue;
+            else{
+                iConfig = flip(iConfig, i);
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    //toggle 0s and 1s
+    public String flip(String st, int index){
+        String s = "";
+        s = st.substring(index); //only toggle portion from index to length of string
+        s = s.replaceAll("0", "2");
+        s = s.replaceAll("1", "0");
+        s = s.replaceAll("2", "1");
+        
+        return st.substring(0, index)+s;
+    }
+}
