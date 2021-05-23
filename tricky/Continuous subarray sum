@@ -1,0 +1,35 @@
+class Solution {
+    public boolean checkSubarraySum(int[] nums, int k) {
+        
+        //lets say subarray sum(i, j) is divisble by k
+        //then sum(i,j) = sum(0,j) - sum(0,i-1)
+        // sum = q*k + rem
+        // sum(i,j) = q1*k+rem1 - (q2*k+rem2)
+        // sum(i,j) = (q1-q2) *k + rem1-rem2
+        // for subarray to be divisble by k, its remainder should be 0
+        // rem1 - rem2 = 0 and hence, rem1 = rem2
+        
+        //so we find a subarray where remainder at i and j is same
+        
+        int curr_sum = 0;
+        
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, -1);
+       
+        for(int i=0; i<nums.length; i++){
+            curr_sum += nums[i];
+            
+            int rem = curr_sum%k;
+            
+            if(map.containsKey(rem)){
+                if(i-map.get(rem)>1)return true; //subarray length should be greater than 2
+            }
+            
+            else map.put(rem, i);
+            
+        }
+        
+        return false;
+        
+    }
+}
