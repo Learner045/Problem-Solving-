@@ -1,0 +1,31 @@
+class Solution {
+    Map<Integer, Integer> memo; //index, count
+    
+    public int numDecodings(String s) {
+        
+        memo = new HashMap<>();
+        
+        return decodeString(0, s);
+    }
+    
+    public int decodeString(int index, String s){
+        //either you reach the end of string or you just have 1 number left, so you just have 1 way to decode
+        if(index == s.length()-1 && s.charAt(index)!='0')return 1;
+        if(index >= s.length())return 1;
+        
+        if(memo.containsKey(index))return memo.get(index);
+        
+        if(s.charAt(index) == '0')return 0;
+        
+        
+        int ans = decodeString(index+1, s);
+        
+        if(Integer.parseInt(s.substring(index, index+2)) <= 26){
+            ans += decodeString(index+2, s);
+        }
+        
+        memo.put(index, ans);
+        return ans;
+        
+    }
+}
