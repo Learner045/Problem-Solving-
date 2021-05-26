@@ -1,0 +1,51 @@
+/*
+
+Input: matrix = [[9,9,4],[6,6,8],[2,1,1]]
+Output: 4
+Explanation: The longest increasing path is [1, 2, 6, 9].
+
+*/
+class Solution {
+    
+    int m,n;
+    int matrix[][];
+    int memo[][];
+    int dirx[], diry[];
+    public int longestIncreasingPath(int[][] matrix) {
+        this.matrix = matrix;
+         m = matrix.length;
+         n = matrix[0].length;
+        memo = new int[m][n];
+        dirx = new int[]{1, 0, -1, 0};
+        diry = new int[]{0, 1, 0, -1};
+        
+        //performing dfs on each cell, with memoization
+        int max = 0;
+        for(int i=0; i<m; i++)
+            for(int j=0; j<n; j++)
+                max = Math.max(max, dfs(i,j));
+        
+        return max;
+    }
+    
+    public int dfs(int row, int col){
+        if(memo[row][col]!=0)return memo[row][col];
+        
+        int ans = 0;
+        for(int i=0; i<4; i++){
+            int newRow = row+dirx[i];
+            int newCol = col+diry[i];
+            //our neighbour should be greater
+            if(newRow<0 || newCol<0 || newRow>=m || newCol>=n || matrix[newRow][newCol]<=matrix[row][col])
+                continue;
+            else{
+                ans = Math.max(ans, dfs(newRow, newCol));
+            }
+        }
+        
+        ++ans;
+        memo[row][col] = ans;
+        return ans;
+        
+    }
+}
