@@ -1,0 +1,28 @@
+/*
+Input: prices = [3,3,5,0,0,3,1,4]
+Output: 6
+Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+*/
+
+class Solution {
+    public int maxProfit(int[] prices) {
+        
+        int first_cost = Integer.MAX_VALUE;
+        int first_profit = 0;
+        
+        int second_cost = Integer.MAX_VALUE;
+        int sec_profit = 0;
+        
+        for(int i=0; i<prices.length; i++){
+            
+            first_cost = Math.min(first_cost, prices[i]);
+            first_profit = Math.max(first_profit, prices[i] - first_cost);
+            
+            second_cost = Math.min(second_cost, prices[i] - first_profit);
+            sec_profit = Math.max(sec_profit, prices[i] - second_cost);
+        }
+        
+        return sec_profit;
+    }
+}
