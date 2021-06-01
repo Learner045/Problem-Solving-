@@ -1,0 +1,81 @@
+/**
+ * // This is the HtmlParser's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface HtmlParser {
+ *     public List<String> getUrls(String url) {}
+ * }
+ */
+class Solution {
+    
+    ConcurrentHashMap<String, HashSet<String>> map = new ConcurrentHashMap<>();
+    BlockingQueue<Future> q = new LinkedBlockingQueue<Future>();
+    ExecutorService es = Executors.newCachedThreadPool();
+    
+    
+    private class WebCrawler implements Runnable{
+        private String startUrl;
+        private HtmlParser htmlParser;
+        
+        public WebCrawler(String url, HtmlParser htmlParser){
+            startUrl = url;
+            this.htmlParser = htmlParser;
+        }
+        
+        public void run(){
+            for(String childUrl: htmlParser.getUrls(startUrl)){
+                
+                final String hostname = getHostName(childUrl);
+                
+                if(map.containsKey(hostname)){
+                    if(!map.get(hostname).contains(childUrl)){
+                        map.get(hostname).add(childUrl);
+                        
+                        q.add(es.submit(new WebCrawler(childUrl, htmlParser)));
+                        
+                    }
+                }
+            }
+        }
+       
+    }
+    
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+        
+        final String hostname = getHostName(startUrl);
+        map.put(hostname, new HashSet<>());
+        map.get(hostname).add(startUrl);
+        
+        q.add(es.submit(new WebCrawler(startUrl, htmlParser)));
+        
+        while(true){
+            
+            if(!q.isEmpty()){
+                try{
+                q.take().get();
+                }catch(Exception e){}
+                
+            }else{
+                es.shutdown();
+                break;
+            }
+        }
+        
+        
+        return new ArrayList<>(map.get(hostname));
+    }
+    
+    private String getHostName(String url){
+        
+        int endIndex = url.indexOf("/", 7); 
+        
+        //hostname returned would be everything after http:// and before /
+        //in our case, news.yahoo.com
+        
+        if(endIndex!=-1){
+            return url.substring(7, endIndex);
+        }else{
+            return url.substring(7, url.length());
+        }
+    }
+    
+}
