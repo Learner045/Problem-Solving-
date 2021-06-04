@@ -1,0 +1,89 @@
+/*
+Input: grid = [[0,1,0],[0,0,0],[0,0,1]]
+Output: 2
+*/
+
+class Solution {
+    
+    int[] dirx;
+    int diry[];
+    int m;
+    int n;
+    Queue<Node> q = new LinkedList<>();
+    
+    class Node{
+        int row, col;
+        public Node(int row, int col){
+            this.row = row;
+            this.col = col;
+        }
+    }
+    
+    public int shortestBridge(int[][] A) {
+        
+        dirx = new int[]{1,0,-1,0};
+        diry = new int[]{0,1,0,-1};
+        m = A.length;
+        n = A[0].length;
+        
+        boolean f = false;
+        //we visit 1 island and add it to queue
+        for(int i=0; i<m && !f; i++){
+            for(int j=0; j<n; j++){
+                if(A[i][j] == 1){
+                    visitAll(A, i, j);
+                    f = true;
+                //    System.out.println(f+" is true ");
+                    break;
+                }
+            }
+        }
+        
+        int level = 0;
+        
+        while(!q.isEmpty()){
+            
+            int size = q.size();
+        //    System.out.println(size);
+            
+            while(size-->0){
+                
+                Node curr = q.remove();
+                
+                for(int k=0; k<4; k++){
+                    int r = curr.row+dirx[k];
+                    int c = curr.col+diry[k];
+                 
+                    
+                    if(r<0 || r>=m || c<0 || c>=n || A[r][c] == 2)continue;
+                    
+                    if(A[r][c] == 1)return level;
+                    
+                    A[r][c] = 2; //visit it
+                    q.add(new Node(r,c));
+                    
+                }
+            }
+            level++;
+        }
+        
+        return level;
+        
+    }
+    
+    
+    public void visitAll(int[][]A, int row, int col){
+        if(row<0 || col<0 || row>=m || col>=n || A[row][col]!=1)return;
+        
+        A[row][col] = 2; //visit 
+     //   System.out.println(row+" "+col);
+        q.add(new Node(row, col));
+        
+        for(int i=0; i<4; i++){
+            visitAll(A, row+dirx[i], col+diry[i]);
+        }
+        
+    }
+    
+    
+}
