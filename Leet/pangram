@@ -1,0 +1,44 @@
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+class HelloWorld {
+    public static void main(String[] args) {
+      //  System.out.println("Hello, World!"); 
+        
+        String res = pana("");
+        System.out.println(res);
+    }
+    
+    public static String pana(String text){
+        
+        int base = 26;
+        int[] alphabets = new int[base];
+    
+        int idx = 0;
+        int totalAlphabetsFound = 0;
+        
+        //O(n) but shortcircuits if all letters found
+        for(char c: text.toCharArray()){
+           if(!Character.isLetter(c))continue;
+           
+           c = Character.toLowerCase(c);
+           if(totalAlphabetsFound == base)return "";
+           //System.out.println(c);
+           idx = c-'a';
+           alphabets[idx]++;
+           if(alphabets[idx] == 1){
+               totalAlphabetsFound++;
+           }
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        //runs O(26)
+        for(int i=0; i<alphabets.length; i++){
+            if(alphabets[i]==0){
+                sb.append( (char)(i+'a'));
+            }
+        }
+        
+        return sb.toString();
+    }
+}
