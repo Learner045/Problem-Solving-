@@ -1,0 +1,90 @@
+class LFUCache {
+
+    Map<Integer, Integer> map; //key value
+    Map<Integer, Integer> freqMap; //key freq
+    Map<Integer, LinkedHashSet<Integer>> freqToKeysMap; //freq - [keys] least recently used keys would be at the end
+    int min; //min freq 
+    int cap;
+    
+    public LFUCache(int capacity) {
+        this.cap = capacity;
+        this.min = 1;
+        map = new HashMap<>();
+        freqMap = new HashMap<>();
+        freqToKeysMap = new HashMap<>();
+        
+    }
+    
+    public int get(int key) {
+        if(!map.containsKey(key))return -1;
+        
+        int value = map.get(key);
+        
+        int oldValue = freqMap.get(key);
+        int newValue = oldValue+1;
+        
+        freqMap.put(key, newValue);
+        
+        if(!freqToKeysMap.containsKey(newValue)){
+            freqToKeysMap.put(newValue, new LinkedHashSet<>()); 
+        }
+        freqToKeysMap.get(newValue).add(key);
+        
+        //delete
+        freqToKeysMap.get(oldValue).remove(key);
+        
+        if(freqToKeysMap.get(oldValue).size()==0){
+            freqToKeysMap.remove(oldValue); //this frequency no longer present so we remove it
+            
+            if(oldValue == min){
+                min = newValue; //imp if we are removing our oldvalue freq. our new min is newValue freq
+            }
+        }
+        
+     
+        
+        return value;
+    }
+    
+    public void put(int key, int value) {
+        if(cap == 0)return;
+        
+        if(map.containsKey(key)){
+            map.put(key, value);
+            get(key);
+           
+        }else{
+            
+            if(map.size() == cap){
+                
+                //remove a key val
+                int rkey = freqToKeysMap.get(min).iterator().next(); //key to remove from front
+                
+                map.remove(rkey);
+                freqMap.remove(rkey);
+                
+                freqToKeysMap.get(min).remove(rkey);
+                
+                if( freqToKeysMap.get(min).size()==0)  freqToKeysMap.remove(min);
+                
+            }
+         
+            
+            this.min = 1; //putting a new key val pair
+           
+            
+            freqToKeysMap.putIfAbsent(min, new LinkedHashSet<>());
+            freqToKeysMap.get(min).add(key);
+            map.put(key, value);
+            freqMap.put(key, 1);
+            
+        }
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
