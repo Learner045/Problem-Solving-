@@ -1,0 +1,33 @@
+/*
+Input: heights = [2,1,5,6,2,3]
+Output: 10
+Explanation: The above is a histogram where width of each bar is 1.
+The largest rectangle is shown in the red area, which has an area = 10 units.
+*/
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        
+        Stack<Integer> stack = new Stack<>();
+        stack.add(-1);
+        
+        int maxArea = 0;
+        
+        
+        for(int i=0; i<heights.length; i++){
+            
+            while(stack.peek()!=-1 && heights[stack.peek()]>= heights[i]){
+                int currHeight = heights[stack.pop()];
+                int width = i-1-stack.peek();
+                maxArea = Math.max(maxArea, currHeight* width);
+            }
+            stack.push(i);
+        }
+        
+        while(stack.peek()!=-1){
+            int currHeight = heights[stack.pop()];
+                int width = heights.length-1-stack.peek();
+                maxArea = Math.max(maxArea, currHeight* width);
+        }
+        return maxArea;
+    }
+}
