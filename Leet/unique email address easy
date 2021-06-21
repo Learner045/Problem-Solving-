@@ -1,0 +1,31 @@
+class Solution {
+    public int numUniqueEmails(String[] emails) {
+        
+        //localname@domainname
+        //everything after + is ignored in localname
+        //. ignored in localname
+        
+        Set<String> emailSet = new HashSet<>();
+        
+        //["test.email+alex@leetcode.com","test.email.leet+alex@code.com"]
+        for(String email: emails){
+            
+            String local = email.split("@")[0];
+            String domain = email.split("@")[1];
+            
+            int index = local.indexOf("+");
+            if(index>=0){
+                local = local.substring(0, index);
+            }
+            
+           // System.out.println(local);
+            local = local.replaceAll("[.]", "");
+            
+           // System.out.println(local);
+            emailSet.add((local+"@"+domain));
+        }
+        
+        return emailSet.size();
+        
+    }
+}
